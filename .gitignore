@@ -19,3 +19,9 @@ connections.toml
 .DS_Store
 Thumbs.db
 .vscode/
+
+# dbt generated files
+/logs/
+loyalty_analytics/logs/
+loyalty_analytics/target/
+loyalty_analytics/dbt_packages/
