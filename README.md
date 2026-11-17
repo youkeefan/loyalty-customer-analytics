@@ -407,3 +407,50 @@ It demonstrates data engineering and analytics engineering concepts in a self-ma
 ---
 
 **Repository:** [GitHub – Loyalty Customer Analytics](https://github.com/youkeefan/loyalty-customer-analytics)
+
+
+## 11. Customer Segmentation
+
+### Overview
+
+Developed a customer segmentation model using total customer spend and transaction frequency.
+
+The model uses SQL window functions to rank customers into quartiles and classify them into four mutually exclusive customer segments.
+
+### Methodology
+
+- Used `NTILE(4)` to divide customers into quartiles based on total spend.
+- Used `NTILE(4)` to divide customers into quartiles based on transaction frequency.
+- Applied `CASE WHEN` logic to assign customer segments.
+- Built the model using dbt `ref()` to maintain model dependencies.
+
+### Customer Segments
+
+| Customer Segment | Customers | Percentage |
+|---|---:|---:|
+| HIGH_VALUE | 919 | 18.38% |
+| BIG_SPENDER | 331 | 6.62% |
+| FREQUENT_CUSTOMER | 331 | 6.62% |
+| DEVELOPING_CUSTOMER | 3,419 | 68.38% |
+| **Total** | **5,000** | **100%** |
+
+### Data Quality Validation
+
+- 5,000 total customer records.
+- 5,000 unique customer IDs.
+- Zero null customer segments.
+- Four additional dbt tests passed:
+  - Customer ID not null.
+  - Customer ID unique.
+  - Customer segment not null.
+  - Customer segment accepted values.
+
+### Documentation and Lineage
+
+Generated dbt documentation using `dbt docs generate` and reviewed the lineage graph to understand dependencies across staging, intermediate and marts models.
+
+### GitHub Development Workflow
+
+- Created a feature branch: `feature/customer-segmentation`.
+- Committed and pushed model changes.
+- Created and merged Pull Request #1 into `main`.
