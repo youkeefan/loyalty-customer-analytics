@@ -1,0 +1,24 @@
+
+version: 2
+
+models:
+  - name: mart_customer_segments
+    description: "Customer segmentation based on spending and transaction frequency."
+    columns:
+      - name: customer_id
+        description: "Unique identifier for each customer."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: customer_segment
+        description: "Customer segment based on spending and transaction frequency."
+        data_tests:
+          - not_null
+          - accepted_values:
+              arguments:
+                values:
+                  - HIGH_VALUE
+                  - BIG_SPENDER
+                  - FREQUENT_CUSTOMER
+                  - DEVELOPING_CUSTOMER
