@@ -33,3 +33,6 @@ travel_data_platform/data_clean/
 # Travel Data Platform - local execution markers
 travel_data_platform/batch*_done.txt
 travel_data_platform/docs/*.lock
+
+# Generated test data
+travel_data_platform/data_test/
