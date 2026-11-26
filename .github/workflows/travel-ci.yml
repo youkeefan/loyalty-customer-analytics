@@ -4,9 +4,6 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - 'travel_data_platform/dbt/**'
-      - '.github/workflows/travel-ci.yml'
   workflow_dispatch:
 
 permissions:
@@ -18,7 +15,6 @@ concurrency:
 
 jobs:
   dbt-ci:
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
 
     runs-on: ubuntu-latest
     timeout-minutes: 30
@@ -31,6 +27,13 @@ jobs:
       DBT_ENV_SECRET_CI_PASSPHRASE: ${{ secrets.SNOWFLAKE_CI_KEY_PASSPHRASE }}
 
     steps:
+      - name: Validate trusted branch
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
+        working-directory: .
+        run: |
+          echo "External fork PRs cannot access Snowflake credentials."
+          exit 1
+
       - name: Checkout repository
         uses: actions/checkout@v4
 
