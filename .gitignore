@@ -25,3 +25,21 @@ Thumbs.db
 loyalty_analytics/logs/
 loyalty_analytics/target/
 loyalty_analytics/dbt_packages/
+
+# Travel Data Platform - generated datasets
+travel_data_platform/data/
+travel_data_platform/data_clean/
+
+# Travel Data Platform - local execution markers
+travel_data_platform/batch*_done.txt
+travel_data_platform/docs/*.lock
+
+# Generated test data
+travel_data_platform/data_test/
+# dbt generated files
+travel_data_platform/dbt/logs/
+travel_data_platform/dbt/target/
+travel_data_platform/dbt/dbt_packages/
+
+# dbt local user metadata
+.user.yml
