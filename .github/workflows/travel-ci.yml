@@ -1,0 +1,66 @@
+name: Travel Data Platform CI
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'travel_data_platform/dbt/**'
+      - '.github/workflows/travel-ci.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: travel-platform-ci
+  cancel-in-progress: false
+
+jobs:
+  dbt-ci:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.head.repo.full_name == github.repository
+
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    defaults:
+      run:
+        working-directory: travel_data_platform/dbt
+
+    env:
+      DBT_ENV_SECRET_CI_PASSPHRASE: ${{ secrets.SNOWFLAKE_CI_KEY_PASSPHRASE }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dbt
+        run: |
+          pip install dbt-core==1.12.7 dbt-snowflake==1.12.5
+
+      - name: Configure Snowflake private key
+        env:
+          SNOWFLAKE_CI_PRIVATE_KEY: ${{ secrets.SNOWFLAKE_CI_PRIVATE_KEY }}
+        run: |
+          umask 077
+          printf '%s\n' "$SNOWFLAKE_CI_PRIVATE_KEY" > "$RUNNER_TEMP/travel_ci_private.p8"
+          echo "SNOWFLAKE_CI_PRIVATE_KEY_PATH=$RUNNER_TEMP/travel_ci_private.p8" >> "$GITHUB_ENV"
+
+      - name: Install dbt packages
+        run: dbt deps --profiles-dir ci
+
+      - name: Test Snowflake connection
+        run: dbt debug --profiles-dir ci --target ci
+
+      - name: Build and test CI models
+        run: dbt build --profiles-dir ci --target ci
+
+      - name: Remove private key
+        if: always()
+        run: rm -f "$RUNNER_TEMP/travel_ci_private.p8"
+        
