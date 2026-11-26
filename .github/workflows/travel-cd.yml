@@ -30,14 +30,15 @@ jobs:
         working-directory: travel_data_platform/dbt
 
     env:
+      DBT_RUN_CACHE_DISABLED: "true"
       DBT_ENV_SECRET_PROD_PASSPHRASE: ${{ secrets.SNOWFLAKE_PROD_KEY_PASSPHRASE }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Set up Python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.13'
 
