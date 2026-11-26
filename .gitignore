@@ -40,3 +40,6 @@ travel_data_platform/data_test/
 travel_data_platform/dbt/logs/
 travel_data_platform/dbt/target/
 travel_data_platform/dbt/dbt_packages/
+
+# dbt local user metadata
+.user.yml
